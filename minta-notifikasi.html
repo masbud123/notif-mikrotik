@@ -10,6 +10,17 @@
     <button onclick="mintaNotifikasi()">Klik untuk Mengizinkan</button>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const redirectUrl = getParameterByName("redirect");
+
+            // Jika notifikasi sudah diizinkan sebelumnya, langsung redirect
+            if (Notification.permission === "granted" || sessionStorage.getItem("notif_allowed") === "true") {
+                if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                }
+            }
+        });
+
         function getParameterByName(name) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(name);
@@ -18,7 +29,9 @@
         function mintaNotifikasi() {
             Notification.requestPermission().then(function (permission) {
                 if (permission === "granted") {
+                    sessionStorage.setItem("notif_allowed", "true"); // Simpan izin di sessionStorage
                     alert("Terima kasih! Anda akan menerima notifikasi.");
+                    
                     // Redirect kembali ke halaman login Mikrotik
                     const redirectUrl = getParameterByName("redirect");
                     if (redirectUrl) {
@@ -28,14 +41,6 @@
                     alert("Anda menolak notifikasi, silakan izinkan di pengaturan browser.");
                 }
             });
-        }
-
-        // Jika notifikasi sudah diizinkan sebelumnya, langsung redirect
-        if (Notification.permission === "granted") {
-            const redirectUrl = getParameterByName("redirect");
-            if (redirectUrl) {
-                window.location.href = redirectUrl;
-            }
         }
     </script>
 </body>
