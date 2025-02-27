@@ -13,8 +13,8 @@
         document.addEventListener("DOMContentLoaded", function () {
             const redirectUrl = getParameterByName("redirect");
 
-            // Jika notifikasi sudah diizinkan sebelumnya, langsung redirect
-            if (Notification.permission === "granted" || sessionStorage.getItem("notif_allowed") === "true") {
+            // Jika notifikasi sudah diizinkan, langsung kembali ke halaman login
+            if (Notification.permission === "granted" || localStorage.getItem("notif_allowed") === "true") {
                 if (redirectUrl) {
                     window.location.href = redirectUrl;
                 }
@@ -29,7 +29,7 @@
         function mintaNotifikasi() {
             Notification.requestPermission().then(function (permission) {
                 if (permission === "granted") {
-                    sessionStorage.setItem("notif_allowed", "true"); // Simpan izin di sessionStorage
+                    localStorage.setItem("notif_allowed", "true"); // Simpan status izin secara permanen
                     alert("Terima kasih! Anda akan menerima notifikasi.");
 
                     // Redirect kembali ke halaman login hotspot
