@@ -1,22 +1,11 @@
-self.addEventListener("install", event => {
-    console.log("✅ Service Worker Terpasang");
-    self.skipWaiting();
-});
-
-self.addEventListener("activate", event => {
-    console.log("✅ Service Worker Aktif");
-});
-
-self.addEventListener("push", event => {
-    console.log("📢 Push Notifikasi diterima!");
-
+self.addEventListener('push', function(event) {
     const options = {
-        body: "Notifikasi ini muncul secara otomatis!",
-        icon: "icon.png",
-        badge: "badge.png"
+        body: 'Ini adalah notifikasi dari server!',
+        icon: 'icons/icon.png',
+        badge: 'icons/badge.png'
     };
 
     event.waitUntil(
-        self.registration.showNotification("Hotspot Notification", options)
+        self.registration.showNotification('Hotspot Mikrotik', options)
     );
 });
