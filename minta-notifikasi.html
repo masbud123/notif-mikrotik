@@ -14,15 +14,16 @@
             const redirectUrl = getParameterByName("redirect");
 
             console.log("Memeriksa status izin notifikasi...");
+            console.log("Notification.permission:", Notification.permission);
+            console.log("localStorage notif_allowed:", localStorage.getItem("notif_allowed"));
 
-            // Jika notifikasi sudah diizinkan sebelumnya, langsung redirect
+            // Jika notifikasi sudah diizinkan sebelumnya, langsung kembali ke halaman login
             if (Notification.permission === "granted" || localStorage.getItem("notif_allowed") === "true") {
                 console.log("Notifikasi sudah diizinkan, kembali ke halaman login...");
                 if (redirectUrl) {
-                    setTimeout(() => {
-                        window.location.href = redirectUrl;
-                    }, 500); // Tunggu 0.5 detik agar lebih stabil
+                    window.location.href = redirectUrl;
                 }
+                return; // Stop eksekusi agar tidak lanjut meminta izin
             }
         });
 
@@ -33,6 +34,8 @@
 
         function mintaNotifikasi() {
             Notification.requestPermission().then(function (permission) {
+                console.log("Hasil permintaan izin:", permission);
+
                 if (permission === "granted") {
                     console.log("Izin notifikasi diberikan, menyimpan status...");
                     localStorage.setItem("notif_allowed", "true"); // Simpan izin secara permanen
@@ -41,9 +44,7 @@
                     // Redirect kembali ke halaman login hotspot
                     const redirectUrl = getParameterByName("redirect");
                     if (redirectUrl) {
-                        setTimeout(() => {
-                            window.location.href = redirectUrl;
-                        }, 500);
+                        window.location.href = redirectUrl;
                     }
                 } else {
                     console.log("Izin notifikasi ditolak oleh pengguna.");
