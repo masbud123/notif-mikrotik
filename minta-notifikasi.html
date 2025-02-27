@@ -31,8 +31,8 @@
                 if (permission === "granted") {
                     sessionStorage.setItem("notif_allowed", "true"); // Simpan izin di sessionStorage
                     alert("Terima kasih! Anda akan menerima notifikasi.");
-                    
-                    // Redirect kembali ke halaman login Mikrotik
+
+                    // Redirect kembali ke halaman login hotspot
                     const redirectUrl = getParameterByName("redirect");
                     if (redirectUrl) {
                         window.location.href = redirectUrl;
