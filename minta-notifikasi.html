@@ -7,26 +7,10 @@
 </head>
 <body>
     <h2>Izinkan Notifikasi</h2>
+    <p>Anda harus mengizinkan notifikasi untuk melanjutkan ke halaman login.</p>
     <button onclick="mintaNotifikasi()">Klik untuk Mengizinkan</button>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const redirectUrl = getParameterByName("redirect");
-
-            console.log("Memeriksa status izin notifikasi...");
-            console.log("Notification.permission:", Notification.permission);
-            console.log("localStorage notif_allowed:", localStorage.getItem("notif_allowed"));
-
-            // Jika notifikasi sudah diizinkan sebelumnya, langsung kembali ke halaman login
-            if (Notification.permission === "granted" || localStorage.getItem("notif_allowed") === "true") {
-                console.log("Notifikasi sudah diizinkan, kembali ke halaman login...");
-                if (redirectUrl) {
-                    window.location.href = redirectUrl;
-                }
-                return; // Stop eksekusi agar tidak lanjut meminta izin
-            }
-        });
-
         function getParameterByName(name) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(name);
@@ -34,24 +18,36 @@
 
         function mintaNotifikasi() {
             Notification.requestPermission().then(function (permission) {
-                console.log("Hasil permintaan izin:", permission);
+                console.log("Hasil izin:", permission);
 
                 if (permission === "granted") {
-                    console.log("Izin notifikasi diberikan, menyimpan status...");
-                    localStorage.setItem("notif_allowed", "true"); // Simpan izin secara permanen
+                    console.log("Izin diberikan, menyimpan status...");
+                    localStorage.setItem("notif_allowed", "true"); // Simpan agar tidak meminta ulang
                     alert("Terima kasih! Anda akan menerima notifikasi.");
 
-                    // Redirect kembali ke halaman login hotspot
+                    // Redirect ke halaman login
                     const redirectUrl = getParameterByName("redirect");
                     if (redirectUrl) {
                         window.location.href = redirectUrl;
                     }
                 } else {
-                    console.log("Izin notifikasi ditolak oleh pengguna.");
-                    alert("Anda menolak notifikasi, silakan izinkan di pengaturan browser.");
+                    console.log("Izin ditolak, tetap di halaman ini.");
+                    alert("Anda menolak notifikasi, silakan izinkan untuk melanjutkan.");
                 }
             });
         }
+
+        // Cek apakah izin sudah diberikan sebelumnya
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("Memeriksa status izin...");
+            if (Notification.permission === "granted" || localStorage.getItem("notif_allowed") === "true") {
+                console.log("Notifikasi sudah diizinkan, langsung ke halaman login.");
+                const redirectUrl = getParameterByName("redirect");
+                if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                }
+            }
+        });
     </script>
 </body>
 </html>
