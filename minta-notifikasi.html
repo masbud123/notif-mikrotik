@@ -1,31 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Izinkan Notifikasi</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifikasi Percobaan</title>
 </head>
 <body>
-    <h2>Izinkan Notifikasi</h2>
-    <button onclick="mintaNotifikasi()">🔔 Klik untuk Mengaktifkan Notifikasi</button>
+
+    <h2>Notifikasi Otomatis Setiap 30 Detik</h2>
+    <button onclick="mintaNotifikasi()">Izinkan Notifikasi</button>
 
     <script>
         function mintaNotifikasi() {
-            if ("Notification" in window) {
-                Notification.requestPermission().then(permission => {
-                    if (permission === "granted") {
-                        localStorage.setItem("notif_allowed", "true");
-                        window.location.href = "http://192.168.88.1/login.html";
-                    } else {
-                        alert("Anda menolak notifikasi ❌");
-                    }
-                });
-            } else {
-                alert("Browser tidak mendukung notifikasi!");
-            }
+            Notification.requestPermission().then(function (permission) {
+                if (permission === "granted") {
+                    alert("Notifikasi diaktifkan!");
+                    mulaiNotifikasi();
+                } else {
+                    alert("Anda menolak notifikasi, silakan izinkan di pengaturan browser.");
+                }
+            });
         }
 
-        if (localStorage.getItem("notif_allowed") === "true") {
-            window.location.href = "http://192.168.88.1/login.html";
+        function mulaiNotifikasi() {
+            setInterval(function () {
+                if (Notification.permission === "granted") {
+                    new Notification("Pesan Baru!", {
+                        body: "Ini adalah notifikasi uji coba setiap 30 detik.",
+                        icon: "https://masbud123.github.io/notif-mikrotik/icon.png" // Ganti dengan ikon yang di-host
+                    });
+                }
+            }, 30000); // 30 detik
+        }
+
+        // Jika sebelumnya sudah diizinkan, langsung jalankan notifikasi
+        if (Notification.permission === "granted") {
+            mulaiNotifikasi();
         }
     </script>
+
 </body>
 </html>
