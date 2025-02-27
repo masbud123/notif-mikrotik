@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Izinkan Notifikasi</title>
+</head>
+<body>
+    <h2>Izinkan Notifikasi</h2>
+    <button onclick="mintaNotifikasi()">🔔 Klik untuk Mengaktifkan Notifikasi</button>
+
+    <script>
+        function mintaNotifikasi() {
+            if ("Notification" in window) {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        localStorage.setItem("notif_allowed", "true");
+                        window.location.href = "http://192.168.88.1/login.html";
+                    } else {
+                        alert("Anda menolak notifikasi ❌");
+                    }
+                });
+            } else {
+                alert("Browser tidak mendukung notifikasi!");
+            }
+        }
+
+        if (localStorage.getItem("notif_allowed") === "true") {
+            window.location.href = "http://192.168.88.1/login.html";
+        }
+    </script>
+</body>
+</html>
