@@ -13,10 +13,15 @@
         document.addEventListener("DOMContentLoaded", function () {
             const redirectUrl = getParameterByName("redirect");
 
-            // Jika notifikasi sudah diizinkan, langsung kembali ke halaman login
+            console.log("Memeriksa status izin notifikasi...");
+
+            // Jika notifikasi sudah diizinkan sebelumnya, langsung redirect
             if (Notification.permission === "granted" || localStorage.getItem("notif_allowed") === "true") {
+                console.log("Notifikasi sudah diizinkan, kembali ke halaman login...");
                 if (redirectUrl) {
-                    window.location.href = redirectUrl;
+                    setTimeout(() => {
+                        window.location.href = redirectUrl;
+                    }, 500); // Tunggu 0.5 detik agar lebih stabil
                 }
             }
         });
@@ -29,15 +34,19 @@
         function mintaNotifikasi() {
             Notification.requestPermission().then(function (permission) {
                 if (permission === "granted") {
-                    localStorage.setItem("notif_allowed", "true"); // Simpan status izin secara permanen
+                    console.log("Izin notifikasi diberikan, menyimpan status...");
+                    localStorage.setItem("notif_allowed", "true"); // Simpan izin secara permanen
                     alert("Terima kasih! Anda akan menerima notifikasi.");
 
                     // Redirect kembali ke halaman login hotspot
                     const redirectUrl = getParameterByName("redirect");
                     if (redirectUrl) {
-                        window.location.href = redirectUrl;
+                        setTimeout(() => {
+                            window.location.href = redirectUrl;
+                        }, 500);
                     }
                 } else {
+                    console.log("Izin notifikasi ditolak oleh pengguna.");
                     alert("Anda menolak notifikasi, silakan izinkan di pengaturan browser.");
                 }
             });
