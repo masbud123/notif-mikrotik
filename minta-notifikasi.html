@@ -3,41 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notifikasi Percobaan</title>
+    <title>Izinkan Notifikasi</title>
 </head>
 <body>
-
-    <h2>Notifikasi Otomatis Setiap 30 Detik</h2>
-    <button onclick="mintaNotifikasi()">Izinkan Notifikasi</button>
+    <h2>Izinkan Notifikasi</h2>
+    <button onclick="mintaNotifikasi()">Klik untuk Mengizinkan</button>
 
     <script>
+        function getParameterByName(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
         function mintaNotifikasi() {
             Notification.requestPermission().then(function (permission) {
                 if (permission === "granted") {
-                    alert("Notifikasi diaktifkan!");
-                    mulaiNotifikasi();
+                    alert("Terima kasih! Anda akan menerima notifikasi.");
+                    // Redirect kembali ke halaman login Mikrotik
+                    const redirectUrl = getParameterByName("redirect");
+                    if (redirectUrl) {
+                        window.location.href = redirectUrl;
+                    }
                 } else {
                     alert("Anda menolak notifikasi, silakan izinkan di pengaturan browser.");
                 }
             });
         }
 
-        function mulaiNotifikasi() {
-            setInterval(function () {
-                if (Notification.permission === "granted") {
-                    new Notification("Pesan Baru!", {
-                        body: "Ini adalah notifikasi uji coba setiap 30 detik.",
-                        icon: "https://masbud123.github.io/notif-mikrotik/icon.png" // Ganti dengan ikon yang di-host
-                    });
-                }
-            }, 30000); // 30 detik
-        }
-
-        // Jika sebelumnya sudah diizinkan, langsung jalankan notifikasi
+        // Jika notifikasi sudah diizinkan sebelumnya, langsung redirect
         if (Notification.permission === "granted") {
-            mulaiNotifikasi();
+            const redirectUrl = getParameterByName("redirect");
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+            }
         }
     </script>
-
 </body>
 </html>
